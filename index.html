@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>罗德岛会客室</title>
+</head>
+
+<body>
+    <h1>罗德岛会客室</h1>
+
+    <input id="nameInput" placeholder="Enter your name" />
+    <input id="messageInput" placeholder="Type a message" />
+    <button onclick="sendMessage()">Send</button>
+
+    <ul id="messages"></ul>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const input = document.getElementById("messageInput");
+        const messages = document.getElementById("messages");
+        const nameInput = document.getElementById("nameInput");
+
+
+        socket.on("chat message", (data) => {
+            const li = document.createElement("li");
+            li.textContent = `${data.name}:${data.msg}`;
+            messages.appendChild(li);
+            messages.scrollTop = messages.scrollHeight; // 自动滚动到最新消息
+        });
+
+        function sendMessage() {
+            if(!nameInput.value){
+                alert("Please enter your name first! :)");
+                return;
+            }
+            const msg = input.value;
+            socket.emit("chat message", {name:nameInput.value,msg:msg});
+
+            input.value = "";
+
+            
+        }
+
+
+        input.addEventListener("keypress", (e) => {
+                if (e.key === "Enter") {
+                    sendMessage();
+                }
+            });//敲enter也可以发送
+        
+    </script>
+</body>
+
+</html>
