@@ -1,0 +1,6 @@
+#include<stdio.h>
+int main()
+{
+printf("孙逸卿牛逼“）；
+return 0;
+}
